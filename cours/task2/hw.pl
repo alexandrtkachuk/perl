@@ -18,7 +18,9 @@ $obj->setTemp(85);
 print $obj->getTemp()."\n";
 
 #my $obj2 = Models::myclass->new();
-print $obj2->getTemp()."\n"; #не понял про общие переменные
+print "obj 2:  \n";
+$obj2->{temp}=99;
+print "внутрення:".$obj2->getTemp()."\n"; #не понял про общие переменные
 
 #########################
 
@@ -45,6 +47,9 @@ $test->foo();
 my $test2=Models::nasledie->new();
 
 $test2->setTemp(16);
+
+
+
 print $test2->getTemp()."\n";
 
 #print Dumper($test);

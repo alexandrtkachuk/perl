@@ -11,7 +11,7 @@ use Models::interface;
  my $privatefoo = sub 
     {   
         
-        print 'this is call private method'.$_[0]."\n";
+        print 'this is call private method'.$_[1]."\n";
 
     };
 
@@ -56,6 +56,8 @@ sub foo
 {   
     my ($self)=@_;
     $self->{pfoo}("\n me is send value \n");
+
+    $self->$privatefoo("\n me is send value2 \n") ;
     return 1;
 }
 
