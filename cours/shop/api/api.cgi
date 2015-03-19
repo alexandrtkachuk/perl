@@ -13,7 +13,93 @@ use CGI qw/:standard/;
 
 use Data::Dumper; 
 
-#print Dumper(@INC);
+
+sub msearch
+{
+    #print Dumper($_[0]);
+    #for($_)
+    #   {
+    #        print $_->{'id'};
+    #    }
+        
+
+        
+   my($arr, $s)=@_; 
+   #my $test=$_[0];
+   #    my $s= $_[1];
+
+   #print $s;
+        for(my $i=0;$i<@$arr;$i++ )
+        {
+             if(@$arr[$i]->{'id'}==$s) 
+             {
+                return $i;
+             }
+        }
+
+        return undef;
+
+
+}
+
+sub main
+{
+    print header(-charset=>'utf-8');
+    #print 'good';
+    my $file_name='<shop.json';
+    my $file_handle;
+    my $str='';
+
+
+# открыть для чтения файл по имени, взятом из $file_name
+    open($file_handle, $file_name);
+
+    while(<$file_handle> ){$str.=$_;} #читаем посточно и вводим
+    #print $str;
+    #print $line.'eee'."\n";
+    close($file_handle) or die("Ошибка при закрытии файла: $!\n");
+    
+
+    #param
+    #print Dumper(param);
+    #print param('id');
+    #my $test=decode_json $str;
+    #print Dumper($test->[0]);
+   if(param)
+   {
+        my $test=decode_json $str;
+        #print Dumper($test->[0]);
+        #print param('id');
+       my $i; 
+        if( $i = msearch($test,param('id')) )
+        {
+            #print Dumper($test->[$i]);
+            
+            print encode_json $test->[$i];
+            
+        
+        }
+        else
+        {
+            
+            print encode_json $test->[0];
+            
+        }
+
+
+
+    }
+    else
+    {
+        print $str;
+    } 
+
+}
+
+
+sub test
+{
+print Dumper(@INC);
 my @arr=(
     { "id"=> 1, "title"=> "Сердце", "body"=>"Нормальное вообщем оно.. сойдет.", 
     "price"=> 120.59 , "image"=> "image1.png" }
@@ -60,3 +146,6 @@ print Dumper($test);
 #my $test=decodeJSON($str);
 
 #print '333';
+}
+
+main();
