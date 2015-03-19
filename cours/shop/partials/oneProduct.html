@@ -1,0 +1,15 @@
+ <div>
+ <h2 ng-bind="post.title"> </h2>
+          <p><img ng-src="img/full/{{post.image}}" /></p>
+          <p ng-bind="post.body">          </p>
+          <p>Цена: <span ng-bind="post.price | currency"></span></p>
+          <p>
+				<a class="btn btn-default" href="#/product/{{post.id}}" role="button">Подробней &raquo;</a>  
+				<button type="button" class="btn btn-danger" ng-click="ic.buy($index)" >Купить </button>
+		  </p>
+   </div>
+          
+         
+		  
+          
+         
