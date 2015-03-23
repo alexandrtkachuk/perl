@@ -3,6 +3,11 @@
 use warnings;
 use strict;
 
+use File::Spec;
+my ($volume, $directory, $file) = File::Spec->splitpath(__FILE__);
+
+
+#my $dir = getcwd;
 use CGI qw(:cgi-lib :escapeHTML :unescapeHTML);
 use CGI::Carp qw(fatalsToBrowser); # позволит выводить ошибки в браузер
 #use CGI::Cookie; # позволит работать с куки
@@ -23,7 +28,7 @@ sub loadTemplate
 {
     my($filename)=@_;
     local $/=undef;
-    open my $fh , "<$filename";
+    open my $fh , "<$filename" or print "errr";
     my $html = <$fh>;
     close $fh;
     return $html;
@@ -45,11 +50,11 @@ sub meReplace
 
 sub main
 {
-    my $templete='resources/template/index.html';
+    my $templete=$directory.'resources/template/index.html';
     print "Content-type: text/html; encoding='utf-8'\n\n";
     my $html=loadTemplate($templete );
     print meReplace( $html);
-
+    
 }
 
 main();
