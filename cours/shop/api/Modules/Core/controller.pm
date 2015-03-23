@@ -86,7 +86,8 @@ sub go
     print Dumper(%cookies); 
     print '<hr>';
     print Dumper(%ENV); 
-
+    
+    print time();
     return 1;
     
 
@@ -108,10 +109,11 @@ sub login
 
     #set cookies
     
+     
 
     my $c= CGI::Cookie->new(-name    =>  'foo3',
         -value   =>  ['bar','baz'],
-        -expires =>  '-19');
+        -expires =>  '+12h');
     
     $self->{view}->{'cookies'}=$c;
 }
