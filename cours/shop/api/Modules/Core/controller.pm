@@ -81,8 +81,11 @@ sub go
     }
     #$self->{view}->viewTemplate('index');
     
-    print "!cooks:"; 
+    print '<hr>';
+    print "!!cooks:"; 
     print Dumper(%cookies); 
+    print '<hr>';
+    print Dumper(%ENV); 
 
     return 1;
     
@@ -106,9 +109,9 @@ sub login
     #set cookies
     
 
-    my $c= CGI::Cookie->new(-name    =>  'foo',
+    my $c= CGI::Cookie->new(-name    =>  'foo3',
         -value   =>  ['bar','baz'],
-        -expires =>  '+3M');
+        -expires =>  '-19');
     
     $self->{view}->{'cookies'}=$c;
 }

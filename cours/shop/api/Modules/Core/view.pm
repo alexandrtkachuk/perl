@@ -66,15 +66,16 @@ sub meReplace
 sub setHeader
 {
     my ($self)=@_;
-    
+    my $c;
     if($self->{'cookies'})
     {
-        my $c= $self->{'cookies'};
-        print "Set-Cookie: $c\n"
-    
+         $c= $self->{'cookies'};
+        print "Set-Cookie: $c\n";
+         
     }
 
     print "Content-type: text/html; encoding='utf-8'\n\n";
+    print "<!--Set-Cookie: $c -->\n";
     }
 
 sub viewTemplate
@@ -92,7 +93,23 @@ sub viewJSON
 {
     my ($self,$str)=@_;
     $self->setHeader();
+    my $head = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" 
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Login</title>
+<meta http-equiv="Pragma" content="no-cache">
+</head>
+<body>';
+
+my $footer= '</body> </html>';
+    
+    print $head;
+
     print $str;
+
+    print $footer;
 }
 
 
