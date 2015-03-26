@@ -2,6 +2,11 @@
 
 use warnings;
 use strict;
+
+use File::Basename;
+use constant TDIR=>dirname(__FILE__);
+use lib TDIR;
+
 use Data::Dumper;
 use Models::myclass;
 use Models::mystone;
@@ -43,7 +48,7 @@ print $test->getTemp()."\n";
 
 $test->foo();
 
-
+print "\n Nasledie:";
 my $test2=Models::nasledie->new();
 
 $test2->setTemp(16);
