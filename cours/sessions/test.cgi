@@ -17,7 +17,7 @@ $|=1;
 my $tdir=TDIR."/tmp";
 my $cgi = CGI->new;
 
-my $session = new CGI::Session("driver:File",undef, {Directory=>'/tmp'});
+my $session = new CGI::Session("driver:File", $cgi, {Directory=>'tmp/'});
 
 #$session->param("test", 99551);
 

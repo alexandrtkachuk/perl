@@ -1,12 +1,23 @@
 #!/usr/bin/perl
-
+use vars qw(@ISA @INC @EXPORT_OK );
 use warnings;
 use strict;
 use Data::Dumper;
 # текущяя дериктория
 use constant TDIR=>'/home/alexandr/www/html/perl2/perl/olx/'; 
-use lib TDIR;
-#my $test2='::test';
+#use lib TDIR;
+use lib '/usr/home/user7/public_html/perl/olx/';
+#use  Controller::CtrlPage::test;
+
+sub AUTOLOAD
+{
+    print '<hr />';
+    print Dumper \@_;
+    #print $AUTOLOAD;
+    print 'tess';
+}
+
+
 
 
 
@@ -35,8 +46,8 @@ sub router
         #print $_ ;
     }
     my @rout = split /\//, $test;
-    print Dumper \@rout;
-
+    #print Dumper \@rout;
+    return @rout;
 
 }
 
@@ -44,9 +55,28 @@ sub router
 #
 #
 #
+sub main
+{
 
-print "Content-type: text/html; encoding='utf-8'\n\n";
-print '<pre>', Dumper(%ENV) , '</pre> <hr />'; 
 
-router();
+    print "Content-type: text/html; encoding='utf-8'\n\n";
+    print '<pre>', Dumper(\%ENV) , '</pre> <hr />'; 
 
+    
+    
+    #mee();
+    my $url1='CtrlPage';
+    my(@rout)=router();
+    #print Dumper(\@rout);
+    my $tt=@rout;
+    #print $tt;
+    my $url2=$rout[$tt-1];
+    my  $me='Controller/CtrlPage/'.$url2.'.pm';
+    
+    require  $me;
+     "Controller::CtrlPage::$url2"->go();
+    #print Dumper \@INC;
+}
+
+
+main();

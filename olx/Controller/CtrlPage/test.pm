@@ -1,8 +1,8 @@
-package Controller::CtrlPages::test;
+package Controller::CtrlPage::test;
 
 sub go
 {
-    print 'me test';
+    print '<br>me test<br>';
 
 }
 
