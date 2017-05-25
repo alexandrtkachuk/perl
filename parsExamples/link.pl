@@ -4,12 +4,14 @@ use warnings;
 use HTML::TreeBuilder::XPath;
 use WWW::Curl::Easy;
 use Data::Dumper;
-use URI;
+use URI; 
+use Digest::MD5 qw(md5_hex);
 
 
 
 my ($url, $host) = ('http://192.168.56.100/~alexandr/', 'http://192.168.56.100/');
 
+my ($timeStart) = time;
 
 sub getURL
 {
@@ -17,7 +19,9 @@ sub getURL
     my $curl = new WWW::Curl::Easy;
 
     $curl->setopt(CURLOPT_URL, $url);
-
+    $curl->setopt(CURLOPT_FOLLOWLOCATION, 1);
+    $curl->setopt(CURLOPT_TIMEOUT, 120);
+    
     my ($response_body);
     $curl->setopt(CURLOPT_WRITEDATA, \$response_body);
 
@@ -47,18 +51,26 @@ sub convertLink
 
     return $retLink;
 }
+
 sub check
 {
     my ($url, $host) = @_;
+    #get and add to cache
+    my($code, $body, $err);
+    $body = loadFile($url);
+    
+    if(!$body) {
+        ($code, $body, $err) = getURL($url);
+    } else {
+        $code = 200;
+         $err  = 0;
+    }
 
-    my($code, $body, $err) = getURL($url);
     if($code == 200) {
         my $tree = HTML::TreeBuilder::XPath->new_from_content($body);
         my (@search) = $tree->findvalues('//a/@href' );
-        #print Dumper(@search);
-        #print $body, "\n";
+        saveCache($url, $body);
         return (@search);
-
     } else {
         print "code:", $code, "\tbad url: ", $url, "\n" ;
     }
@@ -66,6 +78,30 @@ sub check
     return ();
 }
 
+sub saveCache
+{
+    my ($key, $body) = @_;
+
+    my $filename = '/tmp/'.md5_hex($key) .  '.cache';
+    open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
+    print $fh $body;
+    close $fh;
+}
+
+sub loadFile
+{
+    my $fileName = shift;
+    $fileName = '/tmp/'.md5_hex($fileName) .  '.cache';
+    return 0 unless(-e $fileName);
+
+    local $/ = undef;
+    open FILE, "$fileName" or die "Couldn't open file: $!";
+    binmode FILE;
+    my $string = <FILE>;
+    close FILE;
+    
+    return $string;
+}
 
 sub load
 {
@@ -84,7 +120,11 @@ sub load
             $hash{$tempUrl} = 1;
             push(@urls, check($tempUrl, $host));
             #add to load
-        } else {
+        } elsif($tempUrl =~m/^https?:/im) {
+            #проверить его
+            print $tempUrl, " - other load\n";
+            check($tempUrl, 'none');
+        } else { 
             print $tempUrl, " - other\n";
         }
 
@@ -92,3 +132,5 @@ sub load
 }
 
 load($url, $host);
+
+print "Work time:", time - $timeStart, "\n";
