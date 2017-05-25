@@ -91,7 +91,9 @@ sub saveCache
 sub loadFile
 {
     my $fileName = shift;
+    
     $fileName = '/tmp/'.md5_hex($fileName) .  '.cache';
+
     return 0 unless(-e $fileName);
 
     local $/ = undef;
@@ -99,7 +101,7 @@ sub loadFile
     binmode FILE;
     my $string = <FILE>;
     close FILE;
-    
+
     return $string;
 }
 
@@ -124,6 +126,7 @@ sub load
             #проверить его
             print $tempUrl, " - other load\n";
             check($tempUrl, 'none');
+             $hash{$tempUrl} = 1;
         } else { 
             print $tempUrl, " - other\n";
         }
